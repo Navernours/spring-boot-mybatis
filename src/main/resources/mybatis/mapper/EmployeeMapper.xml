@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springbootmybatis.mapper.employeeMapper">
+    <resultMap id="employeeMap" type="com.springbootmybatis.domain.Employee">
+        <id column="emp_id" property="emp_id"></id>
+        <result property="emp_name" column="emp_name"></result>
+        <result property="emp_gender" column="emp_gender"></result>
+        <result property="emp_phone" column="emp_phone"></result>
+        <result property="emp_de_id" column="emp_de_id"></result>
+        <association property="department" column="emp_de_id" javaType="com.springbootmybatis.domain.Department">
+             <id property="de_id" column="de_id"></id>
+            <result property="de_name" column="de_name"></result>
+        </association>
+
+    </resultMap>
+
+    <select id="queryEmployeeList" resultMap="employeeMap">
+        select  emp_id,emp_name,emp_gender,emp_phone,de_name,emp_de_id from employee,department where emp_de_id=de_id
+    </select>
+
+    <select id="queryEmployeeById" resultType="Employee">
+        select *from employee where emp_id=#{emp_id}
+    </select>
+
+    <insert id="addEmployee" parameterType="Employee">
+        insert into employee (emp_name,emp_gender,emp_phone,emp_de_id) values(#{emp_name},#{emp_gender},#{emp_phone},#{emp_de_id})
+    </insert>
+
+    <update id="updateEmployee" parameterType="Employee">
+        update employee set emp_name=#{emp_name},emp_gender=#{emp_name},emp_phone=#{emp_phone},emp_de_id=#{emp_de_id} where emp_id=#{emp_id}
+    </update>
+
+    <delete id="deleteEmployeeById" parameterType="Integer">
+        delete from employee where emp_id=#{emp_id}
+    </delete>
+</mapper>
